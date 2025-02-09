@@ -1,0 +1,42 @@
+﻿@model eproject2.Models.Users
+
+<h2>SignUp</h2>
+
+
+<form asp-action="Register" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Enter your name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Role</label>
+        <select asp-for="Role">
+            <option value="PrivateSeller">Private Seller</option>
+            <option value="Agent">Agent</option>
+            <option value="Admin">Admin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Password:</label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+   
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" asp-action="Register" asp-controller="Auth">SignUp</button>
+    </div>
+</form>
+
+
+
+<a href="@Url.Action("Login", "Auth")">Already have an account? SignIn</a>
