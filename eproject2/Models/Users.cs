@@ -55,5 +55,6 @@ namespace eproject2.Models
         public ICollection<Listing> Listings { get; set; } = new List<Listing>();
         public ICollection<UserSubscriptionModel> UserSubscriptions { get; set; } = new List<UserSubscriptionModel>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public int? SubscriptionID { get; internal set; }
     }
 }

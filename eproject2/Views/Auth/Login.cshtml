@@ -25,13 +25,18 @@
             margin-bottom: 15px;
         }
 
+    .form-label {
+        align-items: start;
+        margin-right: 250px;
+    }
+
     .btn-custom {
         background-color: #375a9e;
         color: white;
     }
 
         .btn-custom:hover {
-            background-color: #2a4c85;
+            background-color: grey;
         }
 
     .footer {
@@ -45,6 +50,8 @@
 <div class="container">
     <div class="auth-container">
         <img src="~/images/bg_1.jpg" alt="Sign In">
+
+        
         <h3 class="text-center">Sign In</h3>
         <form asp-action="Login" method="post" enctype="multipart/form-data">
             <div class="mb-3">
@@ -55,7 +62,7 @@
                 <label for="password" class="form-label">Password</label>
                 <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Enter your password">
             </div>
-            <button type="submit" class="btn btn-primary w-100" asp-action="Login" asp-controller="Auth">>Sign In</button>
+            <button type="submit" class="btn btn-primary w-100" asp-action="Login" asp-controller="Auth">Sign In</button>
         </form>
         <p @Url.Action("Register", "Auth") class="text - center mt - 3">Don't have an account? <a asp-controller="Auth" asp-action="Register">Sign Up</a></p>
 
