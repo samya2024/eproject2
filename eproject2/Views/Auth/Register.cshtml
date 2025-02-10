@@ -1,42 +1,84 @@
 ﻿@model eproject2.Models.Users
 
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .auth-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 30px;
+        background: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center;
+    }
+
+        .auth-container img {
+            width: 350px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+    .btn-custom {
+        background-color: #375a9e;
+        color: white;
+    }
+
+        .btn-custom:hover {
+            background-color: #2a4c85;
+        }
+
+    .footer {
+        background-color: #375a9e;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 30px;
+    }
+</style>
+
 <h2>SignUp</h2>
 
+<div class="container">
+    <div class="auth-container mt-4">
+        <img src="~/images/bg_1.jpg" alt="Sign Up">
+        <h3 class="text-center">Sign Up</h3>
+        <form asp-action="Register" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Enter your full name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input asp-for=Email type="email" class="form-control" id="email" placeholder="Enter your email" >
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select asp-for="Role">
+                    <option value="PrivateSeller">Private Seller</option>
+                    <option value="Agent">Agent</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
 
-<form asp-action="Register" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" placeholder="Enter your name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input asp-for=Password type="password" class="form-control" id="password" placeholder="Create a password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Sign Up</b
+                <button type="submit" class=" btn btn-success w-100" asp-action="Register" asp-controller="Auth">SignUp</button>
+        </form>
+        <p @Url.Action("Login", "Auth") class="text-center mt-3">Already have an account? <a asp-controller="Auth" asp-action="Login">Sign In</a></p>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label>Role</label>
-        <select asp-for="Role">
-            <option value="PrivateSeller">Private Seller</option>
-            <option value="Agent">Agent</option>
-            <option value="Admin">Admin</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Password:</label>
-        <input type="password" asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-   
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" asp-action="Register" asp-controller="Auth">SignUp</button>
-    </div>
-</form>
+</div>
 
 
 
-<a href="@Url.Action("Login", "Auth")">Already have an account? SignIn</a>
+ 
