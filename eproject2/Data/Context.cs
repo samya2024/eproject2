@@ -20,6 +20,7 @@ namespace eproject2.Data
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<ContactSubmission> ContactSubmissions { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
     }
 }

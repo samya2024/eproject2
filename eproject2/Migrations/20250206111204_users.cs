@@ -7,6 +7,8 @@ namespace eproject2.Migrations
     /// <inheritdoc />
     public partial class users : Migration
     {
+        public static string Email { get; internal set; }
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -4,12 +4,12 @@
 @{
     var userEmail = HttpContextAccessor.HttpContext.Session.GetString("Email");
     var userRole = HttpContextAccessor.HttpContext.Session.GetString("URole");
+    bool isAuthenticated = !string.IsNullOrEmpty(userEmail);
+    string currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    bool isHomePage = currentController == "Home" && currentAction == "Index";
 
 }
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,46 +37,59 @@
 
 
 </head>
-<
+
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    
     <div class="py-1 bg-black top">
         <div class="container">
             <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
                 <div class="col-lg-12 d-block">
                     <div class="row d-flex">
                         <div class="col-md pr-4 d-flex topper align-items-center">
-                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+                            <div class="icon mr-2 d-flex justify-content-center align-items-center">
+                                <span class="icon-phone2"></span>
+                            </div>
                             <span class="text">1235 2355 98</span>
                         </div>
                         <div class="col-md pr-4 d-flex topper align-items-center">
-                            <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+                            <div class="icon mr-2 d-flex justify-content-center align-items-center">
+                                <span class="icon-paper-plane"></span>
+                            </div>
                             <span class="text">youremail@email.com</span>
                         </div>
+
                         <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-                            @if (!string.IsNullOrEmpty(userEmail)){
+                            @if (isAuthenticated)
+                            {
+                                <p class="mb-0 register-link">
+                                    <span class="mr-3">Welcome, @userEmail (@userRole)</span>
 
-                            <p class="mb-0 register-link">
-                                <span class="mr-3">Welcome, @userEmail , @userRole</span>
-                                    <form asp-controller="Auth" asp-action="Logout" method="post">
-                                        <button type="submit">Logout</button>
+                                    @if (isHomePage) 
+                                    {
+                                        <div class="profile-section">
+                                            <img src="default-avatar.png" alt="Profile" class="profile-icon" style="width:40px; height:40px; border-radius:50%;">
+                                            <a asp-controller="Crud" asp-action="Create" class="btn btn-primary">Update Your Profile</a>
+                                        </div>
+                                    }
+
+                                    <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Logout</button>
                                     </form>
-
-
                                 </p>
-                                }
-
-                                else
-                                {
-                                    <a asp-controller="Auth" asp-action="Register" class="mr-3">Sign Up</a>
-                                    <a asp-controller="Auth" asp-action="Login">Sign In</a>
-                                }
-                            </p>
+                            }
+                            
+                            else
+                            {
+                                <a asp-controller="Auth" asp-action="Register" class="mr-3">Sign Up</a>
+                                <a asp-controller="Auth" asp-action="Login">Sign In</a>
                             }
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">

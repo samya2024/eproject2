@@ -25,10 +25,6 @@ namespace eproject2.Models
         public string Password { get; set; }
 
 
-        [Required]
-        [StringLength(50)]
-        [RegularExpression("PrivateSeller|Agent|Admin", ErrorMessage = "Role must be one of: PrivateSeller, Agent, or Admin.")]
-        public string Role { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -55,6 +51,7 @@ namespace eproject2.Models
         public ICollection<Listing> Listings { get; set; } = new List<Listing>();
         public ICollection<UserSubscriptionModel> UserSubscriptions { get; set; } = new List<UserSubscriptionModel>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public int? SubscriptionID { get; internal set; }
+        public int? SubscriptionID { get; set; }
+        public int Id { get; internal set; }
     }
 }

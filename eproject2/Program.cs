@@ -1,4 +1,6 @@
 using eproject2.Data;
+using eproject2.Reposatory.Interface;
+using eproject2.Reposatory.Services;
 using eproject2.Repositories.Interfaces;
 using eproject2.Repositories.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,6 +28,7 @@ builder.Services.AddDbContext<Context>(Options => Options.UseSqlServer(config.Ge
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 
@@ -49,7 +52,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=index}/{id?}")
+    pattern: "{controller=Auth}/{action=Register}/{id?}")
     .WithStaticAssets();
 
 

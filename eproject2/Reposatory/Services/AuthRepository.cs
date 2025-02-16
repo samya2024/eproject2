@@ -1,11 +1,9 @@
 ﻿using eproject2.Data;
-using eproject2.Migrations;
 using eproject2.Models;
 using eproject2.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace eproject2.Repositories.Services
@@ -15,7 +13,7 @@ namespace eproject2.Repositories.Services
         private readonly Context _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        // Constructor that injects Context and IHttpContextAccessor
+        // Constructor injecting Context and HttpContextAccessor
         public AuthRepository(Context context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
@@ -24,45 +22,37 @@ namespace eproject2.Repositories.Services
 
         public async Task<bool> IsEmailExistsAsync(string email)
         {
-            // Check if email already exists in the database
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
         public async Task<Users> AuthenticateUserAsync(string email, string password)
         {
-            // Find the user by email
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
+            if (user == null || password != user.Password)
             {
-                return null; // User not found
+                return null;
             }
-
-            // Check if the entered password matches the stored password
-            if (password == user.Password)
-            {
-                return user; // Authentication successful
-            }
-
-            return null; // Invalid credentials
+            return user;
         }
-        public async Task<(bool IsSuccess, string Message)> RegisterUserAsync(Users user)
+
+        public async Task<(bool IsSuccess, string Message, int UserId)> RegisterUserAsync(Users user)
         {
             try
             {
                 if (await _context.Users.AnyAsync(u => u.Email == user.Email))
                 {
-                    return (false, "Email is already registered.");
+                    return (false, "Email is already registered.", 0);
                 }
 
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
 
-                return (true, "Registration successful.");
+                return (true, "Registration successful. Please complete your profile.", user.Id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in RegisterUserAsync: {ex.Message}");
-                return (false, "An error occurred during registration. Please try again.");
+                return (false, "An error occurred during registration. Please try again.", 0);
             }
         }
 
@@ -77,7 +67,7 @@ namespace eproject2.Repositories.Services
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetString("Email", user.Email);
-                _httpContextAccessor.HttpContext.Session.SetString("Role", user.Role);
+                _httpContextAccessor.HttpContext.Session.SetString("UserId", user.Id.ToString());
 
                 return (true, "Login successful.");
             }
@@ -88,17 +78,20 @@ namespace eproject2.Repositories.Services
             }
         }
 
-
-        // Password verification function
-        private bool VerifyPassword(string enteredPassword, string storedPasswordHash)
+        public async Task<bool> ApproveUserAsync(int userId, string role)
         {
-            // Hash verification logic (agar hashing use kar rahe hain)
-            return enteredPassword == storedPasswordHash; // Replace with hashing logic
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
-        
+
         public async Task LogoutAsync()
         {
-            // Clear the session when logging out
             _httpContextAccessor.HttpContext.Session.Clear();
             await Task.CompletedTask;
         }

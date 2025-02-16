@@ -1,8 +1,10 @@
 ﻿using eproject2.Data;
 using eproject2.Models;
+using eproject2.Reposatory.Interface;
+using eproject2.Reposatory.Services;
 using eproject2.Repositories.Interfaces;
+using eproject2.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace eproject2.Controllers
@@ -12,104 +14,173 @@ namespace eproject2.Controllers
         private readonly IAuthRepository _authRepository;
         private readonly Context _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public Users UserSubscriptions { get; private set; }
-
-        public CrudController(IAuthRepository authRepository, Context context, IWebHostEnvironment webHostEnvironment)
-        {
-
-            this._context = context;
-            this._webHostEnvironment = webHostEnvironment;
-            
-
-
-        }
-
-        
-
-        
+        private readonly IEmailSender _EmailSender;
       
-        public async Task<IActionResult> Index(UserSubscriptionModel subscription)
+       
+
+
+
+        public CrudController(IAuthRepository authRepository, Context context, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
-            var subscriptions = await _context.UserSubscriptions.ToListAsync();
-            return View(subscriptions);
+            _authRepository = authRepository;
+            _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _EmailSender = emailSender;
+        
         }
 
-          //GET: /Subscriptions/Create
-        public IActionResult Create( )
+        public async Task<IActionResult> Welcome()
+        {
+            TempData.Keep("Data Inserted");
+            var data = await _context.UserProfiles.ToListAsync();
+            return View(data);
+        }
+
+        public IActionResult Create()
         {
             return View();
-        } 
-
-        // 📌 POST: /Subscriptions/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,PackageID,StartDate,ExpiryDate,IsActive")] UserSubscriptionModel subscription)
-
-        {
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "Username");
-            ViewData["PackageID"] = new SelectList(_context.SubscriptionPackages, "PackageID", "PackageName");
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(subscription);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
-            }
-            return View(subscription);
         }
 
-        // 📌 GET: /Subscriptions/Edit/5
+        [HttpPost]
+        public async Task<IActionResult> Create(UserProfile profile)
+        {
+            if (ModelState.IsValid)
+            {
+                await _context.UserProfiles.AddAsync(profile);
+                await _context.SaveChangesAsync();
+
+
+
+                string roleMessage = (profile.Role == "Agent")
+                  ? "You have been granted Agent rights. You can now post ads and manage your listings."
+                  : "You have been granted Private Seller rights. You can now post and manage your listings.";
+
+                string emailBody = $@"
+                <h3>Welcome, {profile.FullName}!</h3>
+                <p>Thank you for signing up. Your role: <b>{profile.Role}</b></p>
+                <p>{roleMessage}</p>
+                <p>Login and start using our platform.</p>
+            ";
+
+
+            //    if (emailSent)
+            //    {
+            //        _logger.LogInformation("Email sent successfully.");
+            //        TempData["Message"] = "Profile created successfully. Check your email for confirmation.";
+            //    }
+            //    else
+            //    {
+            //        _logger.LogError("Email sending failed.");
+            //        TempData["Error"] = "Profile created, but email sending failed.";
+            //    }
+            //    TempData["Message"] = "Profile created successfully. Waiting for admin approval.";
+            //    return RedirectToAction("Login", "Auth");
+            }
+            return View(profile);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (!id.HasValue || _context.UserProfiles == null)
+            {
+                return NotFound();
+            }
+
+            var details = await _context.UserProfiles.FindAsync(id);
+            return View(details);
+        }
+
+        public IActionResult ImageInsert()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImageInsert(ProfileViewModel profile)
+        {
+            if (profile.ProfileImage == null)
+            {
+                return BadRequest("Invalid product data or image path.");
+            }
+
+            string folder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            string fileName = Guid.NewGuid().ToString() + "_" + profile.ProfileImage.FileName;
+            string path = Path.Combine(folder, fileName);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await profile.ProfileImage.CopyToAsync(stream);
+            }
+
+            UserProfile userProfile = new UserProfile()
+            {
+                FullName = profile.FullName,
+                PhoneNumber = profile.PhoneNumber,
+                Address = profile.Address,
+                City = profile.City,
+                Country = profile.Country,
+                Role = profile.Role,
+                ProfileImage = fileName,
+                email = profile.email,
+            };
+
+            _context.UserProfiles.Add(userProfile);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Welcome");
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
-
-            var subscription = await _context.UserSubscriptions.FindAsync(id);
-            if (subscription == null) return NotFound();
-
-            return View(subscription);
-        }
-
-        // 📌 POST: /Subscriptions/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SubscriptionID,UserID,PackageID,StartDate,ExpiryDate,IsActive")] UserSubscriptionModel subscription)
-        {
-            if (id != subscription.SubscriptionID) return NotFound();
-
-            if (ModelState.IsValid)
+            if (!id.HasValue || _context.UserProfiles == null)
             {
-                _context.Update(subscription);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return NotFound();
             }
-            return View(subscription);
+
+            var edit = await _context.UserProfiles.FindAsync(id);
+            return View(edit);
         }
 
-        // 📌 GET: /Subscriptions/Delete/5
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, UserProfile profile)
+        {
+            if (id != profile.Id || _context.UserProfiles == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserProfiles.Update(profile);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Profile updated successfully!";
+            return RedirectToAction("Index", "Home");
+        }
+
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
-
-            var subscription = await _context.UserSubscriptions.FindAsync(id);
-            if (subscription == null) return NotFound();
-
-            return View(subscription);
-        }
-
-        // 📌 POST: /Subscriptions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var subscription = await _context.UserSubscriptions.FindAsync(id);
-            if (subscription != null)
+            if (!id.HasValue || _context.UserProfiles == null)
             {
-                _context.UserSubscriptions.Remove(subscription);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            return RedirectToAction(nameof(Index));
+
+            var user = await _context.UserProfiles.FindAsync(id);
+            return View(user);
         }
 
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirm(int id)
+        {
+            var user = await _context.UserProfiles.FindAsync(id);
+            if (user == null)
+            {
+                return RedirectToAction("Welcome");
+            }
+
+            _context.UserProfiles.Remove(user);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "User deleted successfully!";
+            return RedirectToAction("Welcome");
+        }
     }
 }
