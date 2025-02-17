@@ -124,7 +124,7 @@ namespace eproject2.Controllers
             _context.UserProfiles.Add(userProfile);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Welcome");
+            return RedirectToAction("Home","Index");
         }
 
         public async Task<IActionResult> Edit(int? id)

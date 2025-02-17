@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model eproject2.Models.UserProfile;
 
 @{
     var userEmail = HttpContextAccessor.HttpContext.Session.GetString("Email");
@@ -39,7 +40,7 @@
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-    
+
     <div class="py-1 bg-black top">
         <div class="container">
             <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -61,19 +62,25 @@
                         <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
                             @if (isAuthenticated)
                             {
-                                <p class="mb-0 register-link">
-                                    <span class="mr-3">Welcome, @userEmail (@userRole)</span>
+                                <p class="mb-0  register-link">
+                                    <center> <span class="mr-3">Welcome, @userEmail (@userRole)</span> </center>
 
-                                    @if (isHomePage) 
+                                    @if (isHomePage)
                                     {
-                                        <div class="profile-section">
-                                            <img src="default-avatar.png" alt="Profile" class="profile-icon" style="width:40px; height:40px; border-radius:50%;">
+
+
+                                  
+                                        
                                             <a asp-controller="Crud" asp-action="Create" class="btn btn-primary">Update Your Profile</a>
-                                        </div>
-                                    }
+                                        }
+
+
+                                    
+
+
 
                                     <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger">Logout</button>
+                                        <button type="submit" class="btn btn-danger">SignOut</button>
                                     </form>
                                 </p>
                             }
