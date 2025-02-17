@@ -48,8 +48,8 @@ namespace eproject2.Reposatory.Services
                     From = new MailAddress(getEmail.From),
                     Subject = subject,
                     Body = htmlMessage,
-                    //BodyEncoding = Encoding.UTF8,
-                    //IsBodyHtml = true
+                    BodyEncoding = Encoding.UTF8,
+                    IsBodyHtml = true
                 };
 
                 mailMessage.To.Add(email);
@@ -76,6 +76,11 @@ namespace eproject2.Reposatory.Services
                 _logger.LogError($"❌ Email Sending Failed: {ex.Message}");
                 return false;
             }
+        }
+
+        public Task<bool> SendEmailAsync(object email, string v, string emailBody)
+        {
+            throw new NotImplementedException();
         }
     }
 }

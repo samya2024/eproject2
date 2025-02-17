@@ -6,6 +6,9 @@ using eproject2.Data;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using eproject2.Reposatory.Interface;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using eproject2.Migrations;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace eproject2.Controllers
 {
@@ -48,9 +51,9 @@ namespace eproject2.Controllers
 
             if (ModelState.IsValid)
             {
-                // یوزر کا اکاؤنٹ بنائیں
+                
                 TempData["Message"] = "Registration successful! Please log in.";
-                return RedirectToAction("Login"); // لاگ ان پیج پر ری ڈائریکٹ کریں
+                return RedirectToAction("Login"); 
             }
 
             TempData["Error"] = "Registration failed. Try again.";
@@ -61,22 +64,28 @@ namespace eproject2.Controllers
             [HttpGet]
         public IActionResult Login()
         {
-            ViewBag.SuccessMessage = TempData["SuccessMessage"];
+            ViewBag.SuccessMessage = TempData["Message"]; 
+            ViewBag.ErrorMessage = TempData["ErrorMessage"]; 
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+
             var (isSuccess, message) = await _authRepository.LoginUserAsync(email, password);
             if (isSuccess)
             {
 
 
-                bool emailSent = await _EmailSender.SendEmailAsync(email, "Your Account Approval", "HA");
-                TempData["Message"] = "Login successful! Welcome.";
-                return RedirectToAction("index", "Home");
+                bool emailSent = await _EmailSender.SendEmailAsync(email,"Login" ,"Your Account Approval");
+
+                TempData["SuccessMessage"] = "Login successful! Welcome.";
+                return RedirectToAction("Index", "Home"); 
             }
+            TempData["ErrorMessage"] = message; 
+            return RedirectToAction("Login");
+
 
             ModelState.AddModelError(string.Empty, message);
             return View();
@@ -87,7 +96,7 @@ namespace eproject2.Controllers
         {
             HttpContext.SignOutAsync();
             HttpContext.Session.Clear();
-            TempData["Message"] = "You have been logged out successfully.";
+            TempData["Message"] = "You have been logged out !";
             Response.Cookies.Delete(".AspNetCore.Cookies");
             return RedirectToAction("Login", "Auth");
         }

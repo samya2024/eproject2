@@ -49,36 +49,33 @@ namespace eproject2.Controllers
                 await _context.UserProfiles.AddAsync(profile);
                 await _context.SaveChangesAsync();
 
-
-
                 string roleMessage = (profile.Role == "Agent")
                   ? "You have been granted Agent rights. You can now post ads and manage your listings."
                   : "You have been granted Private Seller rights. You can now post and manage your listings.";
 
                 string emailBody = $@"
-                <h3>Welcome, {profile.FullName}!</h3>
-                <p>Thank you for signing up. Your role: <b>{profile.Role}</b></p>
-                <p>{roleMessage}</p>
-                <p>Login and start using our platform.</p>
-            ";
+        <h3>Welcome, {profile.FullName}!</h3> 
+        <p>Thank you for signing up. Your role: <b>{profile.Role}</b></p>
+        <p>{roleMessage}</p>
+        <p>Login and start using our platform.</p>
+    ";
 
+                
+                bool emailSent = await _EmailSender.SendEmailAsync(profile.email, "Welcome to Our Platform", emailBody);
 
-            //    if (emailSent)
-            //    {
-            //        _logger.LogInformation("Email sent successfully.");
-            //        TempData["Message"] = "Profile created successfully. Check your email for confirmation.";
-            //    }
-            //    else
-            //    {
-            //        _logger.LogError("Email sending failed.");
-            //        TempData["Error"] = "Profile created, but email sending failed.";
-            //    }
-            //    TempData["Message"] = "Profile created successfully. Waiting for admin approval.";
-            //    return RedirectToAction("Login", "Auth");
+                if (emailSent)
+                {
+                    TempData["Message"] = "Profile created successfully. Check your email for confirmation.";
+                }
+                else
+                {
+                    TempData["Error"] = "Profile created, but email sending failed.";
+                }
+
+                return RedirectToAction("index", "Home");
             }
             return View(profile);
         }
-
         public async Task<IActionResult> Details(int? id)
         {
             if (!id.HasValue || _context.UserProfiles == null)
