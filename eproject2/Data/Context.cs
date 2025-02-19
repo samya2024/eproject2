@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eproject2.Data
 {
-    public class Context: DbContext
+    public class Context : DbContext
     {
         public Context(DbContextOptions<Context> options) : base(options) { }
         public DbSet<Users> Users { get; set; }

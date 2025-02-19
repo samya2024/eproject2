@@ -29,14 +29,14 @@ namespace eproject2.Models
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        private bool _isActive = true; 
+        private bool _isActive = true;
 
         public bool IsActive
         {
             get => _isActive;
             set
             {
-                
+
                 if (CreatedAt > DateTime.UtcNow.AddDays(-7))
                 {
                     _isActive = value;
