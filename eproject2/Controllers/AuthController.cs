@@ -17,7 +17,7 @@ namespace eproject2.Controllers
         private readonly IAuthRepository _authRepository;
         private readonly Context _context;
         private readonly IEmailSender _EmailSender;
-            
+
         public AuthController(IAuthRepository authRepository, Context context, IEmailSender emailSender)
         {
             _EmailSender = emailSender;
@@ -45,27 +45,27 @@ namespace eproject2.Controllers
                 return View(user);
             }
 
-        
+
 
             var (isSuccess, message, userId) = await _authRepository.RegisterUserAsync(user);
 
             if (ModelState.IsValid)
             {
-                
+
                 TempData["Message"] = "Registration successful! Please log in.";
-                return RedirectToAction("Login"); 
+                return RedirectToAction("Login");
             }
 
             TempData["Error"] = "Registration failed. Try again.";
             return View();
         }
- 
 
-            [HttpGet]
+
+        [HttpGet]
         public IActionResult Login()
         {
-            ViewBag.SuccessMessage = TempData["Message"]; 
-            ViewBag.ErrorMessage = TempData["ErrorMessage"]; 
+            ViewBag.SuccessMessage = TempData["Message"];
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
             return View();
         }
 
@@ -81,9 +81,9 @@ namespace eproject2.Controllers
                 bool emailSent = await _EmailSender.SendEmailAsync(email,"Login" ,"Your Account Approval");
 
                 TempData["SuccessMessage"] = "Login successful! Welcome.";
-                return RedirectToAction("Index", "Home"); 
+                return RedirectToAction("Index", "Home");
             }
-            TempData["ErrorMessage"] = message; 
+            TempData["ErrorMessage"] = message;
             return RedirectToAction("Login");
 
 

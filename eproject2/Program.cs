@@ -29,9 +29,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // ✅ Ensure DbContext is registered before this
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 var app = builder.Build();
 
 // ✅ Configure middleware

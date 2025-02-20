@@ -18,7 +18,20 @@ namespace eproject2.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult aboutus()
+        {
+            return View();
+        }
+        public IActionResult Listing()
+        {
+            return View();
+        }
+        public IActionResult ListingDetails()
+        {
+
+            return View();
+        }
+        public IActionResult Agent()
         {
             return View();
         }

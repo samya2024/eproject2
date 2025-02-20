@@ -18,7 +18,6 @@ namespace eproject2.ViewModels
 
         public List<UserSubscriptionModel> ActiveUserSubscriptions { get; set; }
 
-        // ✅ Profile Information
-        public ProfileViewModel UserProfile { get; set; }
+
     }
 }
