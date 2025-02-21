@@ -26,6 +26,7 @@ namespace eproject2.Controllers
         {
             return View();
         }
+
         public IActionResult ListingDetails()
         {
 
@@ -34,6 +35,26 @@ namespace eproject2.Controllers
         public IActionResult Agent()
         {
             return View();
+        }
+        public IActionResult Blogs()
+        {
+
+
+            return View();
+        }
+     
+        public IActionResult BlogDetail()
+        {
+            return View();
+        }
+        public IActionResult Service()
+        {
+            return View();
+        }
+        public IActionResult ContactUs()
+        {
+            return View();
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
