@@ -1,4 +1,5 @@
 ﻿using eproject2.Models;
+using eproject2.ViewModels;
 
 namespace eproject2.Reposatory.Interface
 {
@@ -10,5 +11,9 @@ namespace eproject2.Reposatory.Interface
         Task UpdateAsync(UserProfile profile);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
+        Task AddAsync(ProfileViewModel profile);
+
+
+
     }
 }

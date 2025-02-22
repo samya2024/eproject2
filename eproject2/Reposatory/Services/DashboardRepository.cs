@@ -11,10 +11,12 @@ namespace eproject2.Repositories.Services
     public class DashboardRepository : IDashboardRepository
     {
         private readonly Context _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public DashboardRepository(Context context)
+        public DashboardRepository(Context context, IWebHostEnvironment webHostEnvironment)
         {
-            _context = context;
+            this._context = context;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<DashboardViewModel> GetDashboardDataAsync()

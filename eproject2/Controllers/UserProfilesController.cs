@@ -1,5 +1,7 @@
-﻿using eproject2.Models;
+﻿using eproject2.Data;
+using eproject2.Models;
 using eproject2.Reposatory.Interface;
+using eproject2.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,17 +9,25 @@ public class UserProfilesController : Controller
 {
     private readonly IUserProfileRepository _userProfileRepository;
     private readonly IEmailSender _emailSender;
+    private readonly IWebHostEnvironment _webHostenvironment;
+    private readonly Context _context;
 
-    public UserProfilesController(IUserProfileRepository userProfileRepository, IEmailSender emailSender)
+    public UserProfilesController(Context context, IUserProfileRepository userProfileRepository, IEmailSender emailSender, IWebHostEnvironment webHostEnvironment)
     {
-        _userProfileRepository = userProfileRepository;
-        _emailSender = emailSender;
+        this._userProfileRepository = userProfileRepository;
+        this._emailSender = emailSender;
+        this._webHostenvironment = webHostEnvironment;
+        this._context = context;
+    }
+    [Route("userform")]
+
+    public async Task<IActionResult> userform()
+    {
+        var users = await _userProfileRepository.GetAllAsync();
+        return View("userform", users);
     }
 
-    public async Task<IActionResult> Index()
-    {
-        return View(await _userProfileRepository.GetAllAsync());
-    }
+
 
     public async Task<IActionResult> Details(int? id)
     {
@@ -28,7 +38,7 @@ public class UserProfilesController : Controller
 
         return View(userProfile);
     }
-
+    [Route("Create")]
     public IActionResult Create()
     {
         return View();
@@ -54,6 +64,48 @@ public class UserProfilesController : Controller
         }
         return View(profile);
     }
+    [Route("Imageinsert")]
+    public IActionResult ImageInsert()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ImageInsert(ProfileViewModel profile)
+    {
+        if (profile.ProfileImage == null)
+        {
+            return BadRequest("Invalid product data or image path.");
+        }
+
+        string folder = Path.Combine(_webHostenvironment.WebRootPath, "images");
+        string fileName = Guid.NewGuid().ToString() + "_" + profile.ProfileImage.FileName;
+        string path = Path.Combine(folder, fileName);
+
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            await profile.ProfileImage.CopyToAsync(stream);
+        }
+
+        UserProfile userProfile = new UserProfile()
+        {
+            FullName = profile.FullName,
+            PhoneNumber = profile.PhoneNumber,
+            Address = profile.Address,
+            City = profile.City,
+            Country = profile.Country,
+            Role = profile.Role,
+            ProfileImage = fileName,
+            email = profile.email,
+        };
+
+        _context.UserProfiles.Add(userProfile);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Home", "Index");
+    }
+
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]

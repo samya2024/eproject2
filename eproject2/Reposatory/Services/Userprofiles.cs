@@ -1,6 +1,7 @@
 ﻿using eproject2.Data;
 using eproject2.Models;
 using eproject2.Reposatory.Interface;
+using eproject2.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace eproject2.Reposatory.Services
@@ -8,10 +9,12 @@ namespace eproject2.Reposatory.Services
     public class UserProfileRepository : IUserProfileRepository
     {
         private readonly Context _context;
+    
 
         public UserProfileRepository(Context context)
         {
-            _context = context;
+            this._context = context;
+           
         }
 
         public async Task<IEnumerable<UserProfile>> GetAllAsync()
@@ -51,5 +54,9 @@ namespace eproject2.Reposatory.Services
             return await _context.UserProfiles.AnyAsync(e => e.Id == id);
         }
 
+        public Task AddAsync(ProfileViewModel profile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

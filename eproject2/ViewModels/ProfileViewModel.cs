@@ -10,8 +10,8 @@
         public string City { get; set; }
         public string Country { get; set; }
 
-        public IFormFile ProfileImageFile { get; set; } // For image upload  
-        public string ProfileImage { get; set; } // For storing image path  
+        public IFormFile ProfileImage { get; set; } // For image upload  
+
 
         public string Role { get; set; }
         public string Email { get; set; }
