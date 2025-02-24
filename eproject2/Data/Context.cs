@@ -10,6 +10,7 @@ namespace eproject2.Data
         public DbSet<Users> Users { get; set; }
 
 
+
         public DbSet<SubscriptionPackage> SubscriptionPackages { get; set; }
         public DbSet<UserSubscriptionModel> UserSubscriptions { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
@@ -20,7 +21,8 @@ namespace eproject2.Data
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<ContactSubmission> ContactSubmissions { get; set; }
         public DbSet<Report> Reports { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
-
+        public DbSet<UserProfiles> UserProfiles { get; set; }
+        public DbSet<Dashboardmodel> dashboard { get; set; }
+      
     }
 }

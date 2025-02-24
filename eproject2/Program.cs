@@ -1,6 +1,8 @@
-﻿using eproject2.Data;
+﻿using eproject2.Controllers;
+using eproject2.Data;
 using eproject2.Reposatory.Interface;
 using eproject2.Reposatory.Services;
+using eproject2.Repositories;
 using eproject2.Repositories.Interfaces;
 using eproject2.Repositories.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -29,8 +31,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardService>();
+
+
+
+
+
+
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 

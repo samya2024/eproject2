@@ -1,0 +1,44 @@
+﻿@model eproject2.Models.Dashboardmodel
+
+<h4>Dashboardmodel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TotalUsers" class="control-label"></label>
+                <input asp-for="TotalUsers" class="form-control" />
+                <span asp-validation-for="TotalUsers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalListings" class="control-label"></label>
+                <input asp-for="TotalListings" class="form-control" />
+                <span asp-validation-for="TotalListings" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActiveSubscriptions" class="control-label"></label>
+                <input asp-for="ActiveSubscriptions" class="form-control" />
+                <span asp-validation-for="ActiveSubscriptions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalPayments" class="control-label"></label>
+                <input asp-for="TotalPayments" class="form-control" />
+                <span asp-validation-for="TotalPayments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="dashboard">Back to List</a>
+</div>
+

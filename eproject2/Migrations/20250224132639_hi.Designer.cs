@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eproject2.Data;
 
@@ -11,9 +12,11 @@ using eproject2.Data;
 namespace eproject2.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250224132639_hi")]
+    partial class hi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,12 +41,7 @@ namespace eproject2.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
-
                     b.HasKey("CategoryID");
-
-                    b.HasIndex("DashboardmodelId");
 
                     b.ToTable("Categories");
                 });
@@ -101,34 +99,6 @@ namespace eproject2.Migrations
                     b.ToTable("ContactSubmissions");
                 });
 
-            modelBuilder.Entity("eproject2.Models.Dashboardmodel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActiveSubscriptions")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TotalListings")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPayments")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TotalUsers")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("dashboard");
-                });
-
             modelBuilder.Entity("eproject2.Models.Listing", b =>
                 {
                     b.Property<int>("ListingID")
@@ -142,9 +112,6 @@ namespace eproject2.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -178,8 +145,6 @@ namespace eproject2.Migrations
                     b.HasKey("ListingID");
 
                     b.HasIndex("CategoryID");
-
-                    b.HasIndex("DashboardmodelId");
 
                     b.HasIndex("LocationID");
 
@@ -234,17 +199,12 @@ namespace eproject2.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Region")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("LocationID");
-
-                    b.HasIndex("DashboardmodelId");
 
                     b.ToTable("Locations");
                 });
@@ -259,9 +219,6 @@ namespace eproject2.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -281,8 +238,6 @@ namespace eproject2.Migrations
 
                     b.HasKey("PaymentID");
 
-                    b.HasIndex("DashboardmodelId");
-
                     b.HasIndex("UserID");
 
                     b.ToTable("Payments");
@@ -299,9 +254,6 @@ namespace eproject2.Migrations
                     b.Property<int>("ActiveSubscriptions")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ReportDate")
                         .HasColumnType("datetime2");
 
@@ -315,8 +267,6 @@ namespace eproject2.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ReportID");
-
-                    b.HasIndex("DashboardmodelId");
 
                     b.ToTable("Reports");
                 });
@@ -371,9 +321,6 @@ namespace eproject2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -399,8 +346,6 @@ namespace eproject2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DashboardmodelId");
-
                     b.ToTable("UserProfiles");
                 });
 
@@ -411,9 +356,6 @@ namespace eproject2.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionID"));
-
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -432,8 +374,6 @@ namespace eproject2.Migrations
 
                     b.HasKey("SubscriptionID");
 
-                    b.HasIndex("DashboardmodelId");
-
                     b.HasIndex("PackageID");
 
                     b.HasIndex("UserID");
@@ -451,9 +391,6 @@ namespace eproject2.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DashboardmodelId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -479,16 +416,7 @@ namespace eproject2.Migrations
 
                     b.HasKey("UserID");
 
-                    b.HasIndex("DashboardmodelId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("eproject2.Models.CategoryModel", b =>
-                {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("DashboardmodelId");
                 });
 
             modelBuilder.Entity("eproject2.Models.Listing", b =>
@@ -498,10 +426,6 @@ namespace eproject2.Migrations
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("RecentListings")
-                        .HasForeignKey("DashboardmodelId");
 
                     b.HasOne("eproject2.Models.Location", "Location")
                         .WithMany("Listings")
@@ -533,19 +457,8 @@ namespace eproject2.Migrations
                     b.Navigation("Listing");
                 });
 
-            modelBuilder.Entity("eproject2.Models.Location", b =>
-                {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("Locations")
-                        .HasForeignKey("DashboardmodelId");
-                });
-
             modelBuilder.Entity("eproject2.Models.Payment", b =>
                 {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("RecentPayments")
-                        .HasForeignKey("DashboardmodelId");
-
                     b.HasOne("eproject2.Models.Users", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserID")
@@ -555,26 +468,8 @@ namespace eproject2.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("eproject2.Models.Report", b =>
-                {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("AllReports")
-                        .HasForeignKey("DashboardmodelId");
-                });
-
-            modelBuilder.Entity("eproject2.Models.UserProfiles", b =>
-                {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("UserProfiles")
-                        .HasForeignKey("DashboardmodelId");
-                });
-
             modelBuilder.Entity("eproject2.Models.UserSubscriptionModel", b =>
                 {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("ActiveUserSubscriptions")
-                        .HasForeignKey("DashboardmodelId");
-
                     b.HasOne("eproject2.Models.SubscriptionPackage", "Package")
                         .WithMany("UserSubscriptions")
                         .HasForeignKey("PackageID")
@@ -592,35 +487,9 @@ namespace eproject2.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("eproject2.Models.Users", b =>
-                {
-                    b.HasOne("eproject2.Models.Dashboardmodel", null)
-                        .WithMany("RecentUsers")
-                        .HasForeignKey("DashboardmodelId");
-                });
-
             modelBuilder.Entity("eproject2.Models.CategoryModel", b =>
                 {
                     b.Navigation("Listings");
-                });
-
-            modelBuilder.Entity("eproject2.Models.Dashboardmodel", b =>
-                {
-                    b.Navigation("ActiveUserSubscriptions");
-
-                    b.Navigation("AllReports");
-
-                    b.Navigation("Categories");
-
-                    b.Navigation("Locations");
-
-                    b.Navigation("RecentListings");
-
-                    b.Navigation("RecentPayments");
-
-                    b.Navigation("RecentUsers");
-
-                    b.Navigation("UserProfiles");
                 });
 
             modelBuilder.Entity("eproject2.Models.Listing", b =>

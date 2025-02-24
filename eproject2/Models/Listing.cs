@@ -43,6 +43,6 @@ namespace eproject2.Models
         public bool IsFeatured { get; set; } = false;
 
         public ICollection<ListingImage> ListingImagesPath { get; set; }
-
+      
     }
 }

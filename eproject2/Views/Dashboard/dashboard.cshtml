@@ -1,0 +1,48 @@
+﻿@model List<eproject2.Models.Dashboardmodel>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2 class="mb-4 text-center">Admin Dashboard</h2>
+
+@foreach (var Model in Model) 
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Users</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.TotalUsers</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Listings</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.TotalListings</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Active Subscriptions</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.ActiveSubscriptions</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Total Payments</div>
+                <div class="card-body">
+                    <h5 class="card-title">$@Model.TotalPayments</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+}
